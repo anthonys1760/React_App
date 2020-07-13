@@ -29,10 +29,24 @@ const NotHiring = () =>
 </div>
 
 class Library extends React.Component {
+  
   state = { 
       open: true,
       freeBookmark: true,
-      hiring: false
+      hiring: false,
+      data: [],
+      loading: false
+  }
+
+  componentDidMount() {
+    this.setState({loading: true})
+    fetch('https://hplussport.com/api/products/order/price/sort/asc/qty/1')
+        .then(data => data.json())
+        .then(data => this.setState({data, loading: false}))
+  }
+
+  componentDidUpdate() {
+    console.log('The component just updated');
   }
 
   toggleOpenClosed = () => {
@@ -45,6 +59,8 @@ class Library extends React.Component {
     const { books } = this.props
     return (
       <div>
+        {this.state.loading
+        }
         {this.state.hiring ? <Hiring /> : <NotHiring />}
         <h1>The Library is {this.state.open ? 'open' : 'closed'}</h1>
         <button onClick={this.toggleOpenClosed}>Change</button>
